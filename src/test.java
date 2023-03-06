@@ -33,7 +33,7 @@ public class test {
         //maxAreaOfIsland(new int[][]{{0,1,1,0,0,1,1,0},{0,1,0,0,0,1,1,0}});
         //findCircleNum(new int[][]{{1,0,0,1},{0,1,1,0},{0,1,1,1},{1,0,1,1}});
         //permute(new int[]{1,2,3});
-        //combine(4, 2);
+        combine(4, 2);
     }
 
     /**
