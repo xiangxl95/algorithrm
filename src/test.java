@@ -1,3 +1,5 @@
+import javafx.util.Pair;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -34,7 +36,180 @@ public class test {
         //findCircleNum(new int[][]{{1,0,0,1},{0,1,1,0},{0,1,1,1},{1,0,1,1}});
         //permute(new int[]{1,2,3});
         //combine(4, 2);
+        findLadders("aaaaa", "uuuuu", new ArrayList<>(Arrays.asList("aaaaa","waaaa","wbaaa","xaaaa","xbaaa","bbaaa","bbwaa","bbwba","bbxaa","bbxba","bbbba","wbbba","wbbbb","xbbba","xbbbb","cbbbb","cwbbb","cwcbb","cxbbb","cxcbb","cccbb","cccwb","cccwc","cccxb","cccxc","ccccc","wcccc","wdccc","xcccc","xdccc","ddccc","ddwcc","ddwdc","ddxcc","ddxdc","ddddc","wdddc","wdddd","xdddc","xdddd","edddd","ewddd","ewedd","exddd","exedd","eeedd","eeewd","eeewe","eeexd","eeexe","eeeee","weeee","wfeee","xeeee","xfeee","ffeee","ffwee","ffwfe","ffxee","ffxfe","ffffe","wfffe","wffff","xfffe","xffff","gffff","gwfff","gwgff","gxfff","gxgff","gggff","gggwf","gggwg","gggxf","gggxg","ggggg","wgggg","whggg","xgggg","xhggg","hhggg","hhwgg","hhwhg","hhxgg","hhxhg","hhhhg","whhhg","whhhh","xhhhg","xhhhh","ihhhh","iwhhh","iwihh","ixhhh","ixihh","iiihh","iiiwh","iiiwi","iiixh","iiixi","iiiii","wiiii","wjiii","xiiii","xjiii","jjiii","jjwii","jjwji","jjxii","jjxji","jjjji","wjjji","wjjjj","xjjji","xjjjj","kjjjj","kwjjj","kwkjj","kxjjj","kxkjj","kkkjj","kkkwj","kkkwk","kkkxj","kkkxk","kkkkk","wkkkk","wlkkk","xkkkk","xlkkk","llkkk","llwkk","llwlk","llxkk","llxlk","llllk","wlllk","wllll","xlllk","xllll","mllll","mwlll","mwmll","mxlll","mxmll","mmmll","mmmwl","mmmwm","mmmxl","mmmxm","mmmmm","wmmmm","wnmmm","xmmmm","xnmmm","nnmmm","nnwmm","nnwnm","nnxmm","nnxnm","nnnnm","wnnnm","wnnnn","xnnnm","xnnnn","onnnn","ownnn","owonn","oxnnn","oxonn","ooonn","ooown","ooowo","oooxn","oooxo","ooooo","woooo","wpooo","xoooo","xpooo","ppooo","ppwoo","ppwpo","ppxoo","ppxpo","ppppo","wpppo","wpppp","xpppo","xpppp","qpppp","qwppp","qwqpp","qxppp","qxqpp","qqqpp","qqqwp","qqqwq","qqqxp","qqqxq","qqqqq","wqqqq","wrqqq","xqqqq","xrqqq","rrqqq","rrwqq","rrwrq","rrxqq","rrxrq","rrrrq","wrrrq","wrrrr","xrrrq","xrrrr","srrrr","swrrr","swsrr","sxrrr","sxsrr","sssrr","ssswr","sssws","sssxr","sssxs","sssss","wssss","wtsss","xssss","xtsss","ttsss","ttwss","ttwts","ttxss","ttxts","tttts","wttts","wtttt","xttts","xtttt","utttt","uwttt","uwutt","uxttt","uxutt","uuutt","uuuwt","uuuwu","uuuxt","uuuxu","uuuuu","zzzzz","zzzzy","zzzyy","zzyyy","zzyyx","zzyxx","zzxxx","zzxxw","zzxww","zzwww","zzwwv","zzwvv","zzvvv","zzvvu","zzvuu","zzuuu","zzuut","zzutt","zzttt","zztts","zztss","zzsss","zzssr","zzsrr","zzrrr","zzrrq","zzrqq","zzqqq","zzqqp","zzqpp","zzppp","zzppo","zzpoo","zzooo","zzoon","zzonn","zznnn","zznnm","zznmm","zzmmm","zzmml","zzmll","zzlll","zzllk","zzlkk","zzkkk","zzkkj","zzkjj","zzjjj","zzjji","zzjii","zziii","zziih","zzihh","zzhhh","zzhhg","zzhgg","zzggg","zzggf","zzgff","zzfff","zzffe","zzfee","zzeee","zzeed","zzedd","zzddd","zzddc","zzdcc","zzccc","zzccz","azccz","aaccz","aaacz","aaaaz","uuuzu","uuzzu","uzzzu","zzzzu")));
     }
+
+    /**
+     * leetcode126. Word Ladder II
+     * 反向dfs可提高效率
+     * @param beginWord
+     * @param endWord
+     * @param wordList
+     * @return
+     */
+    public static List<List<String>> findLadders(String beginWord, String endWord, List<String> wordList) {
+        if(!wordList.contains(endWord)) {
+            return result;
+        }
+        Queue<String> queue = new LinkedList<>();
+        Set<String> nextLevel = new HashSet<>();
+        queue.add(beginWord);
+        int L = beginWord.length();
+        for(String word : wordList) {
+            for(int i = 0;i < L;++i) {
+                String newWord = word.substring(0, i) + "*" + word.substring(i + 1, L);
+                List<String> list = allComboDict.getOrDefault(newWord, new ArrayList<>());
+                list.add(word);
+                allComboDict.put(newWord, list);
+            }
+        }
+        wordList.remove(beginWord);
+        boolean find = false;
+        while(!queue.isEmpty()) {
+            int size = queue.size();
+            while(size-- > 0) {
+                String word = queue.poll();
+                for(int i = 0;i < L;++i) {
+                    String newWord = word.substring(0, i) + "*" + word.substring(i + 1, L);
+                    for(String adjacentWord : allComboDict.getOrDefault(newWord, new ArrayList<>())) {
+                        List<String> list = path.getOrDefault(adjacentWord, new LinkedList<>());
+                        if(word.equals(adjacentWord)) {
+                            continue;
+                        }
+                        if(endWord.equals(adjacentWord)) {
+                            find = true;
+                            list.add(word);
+                            path.put(adjacentWord, list);
+                        }
+                        if(!find && wordList.contains(adjacentWord)) {
+                            nextLevel.add(adjacentWord);
+                            list.add(word);
+                            path.put(adjacentWord, list);
+                        }
+                    }
+                }
+
+            }
+
+            if(find) {
+                break;
+            }
+            queue.addAll(nextLevel);
+            wordList.removeAll(nextLevel);
+            nextLevel.clear();
+
+        }
+        List<String> solution = new LinkedList();
+        solution.add(endWord);
+        reverseDfs(endWord, beginWord, solution);
+        return result;
+    }
+
+    public static void reverseDfs(String src, String des, List<String> list) {
+        if(src.equals(des)) {
+            List<String> tempList = new LinkedList(list);
+            Collections.reverse(tempList);
+            result.add(tempList);
+            return;
+        }
+        for(String adjacentWord : path.getOrDefault(src, new LinkedList<String>())) {
+            list.add(adjacentWord);
+            reverseDfs(adjacentWord, des, list);
+            list.remove(list.size() - 1);
+        }
+    }
+
+    static Map<String, List<String>> allComboDict = new HashMap();
+    static Map<String, List<String>> path = new HashMap();
+    static List<List<String>> result = new LinkedList();
+
+    /**
+     * leetcode126. Word Ladder II
+     * 此种解法由于正向dfs会导致耗时较久，leetcode无法AC
+     * 双端BFS比单向bfs效率高，但此题需要反向构建图及反向dfs故无法使用双端bfs
+     * @param beginWord
+     * @param endWord
+     * @param wordList
+     * @return
+     */
+    /*public static List<List<String>> findLadders(String beginWord, String endWord, List<String> wordList) {
+        if(!wordList.contains(endWord)) {
+            return result;
+        }
+        Set<String> set1 = new HashSet<>();
+        Set<String> set2 = new HashSet<>();
+        set1.add(beginWord);
+        set2.add(endWord);
+        int L = beginWord.length();
+        for(String word : wordList) {
+            for(int i = 0;i < L;++i) {
+                String newWord = word.substring(0, i) + "*" + word.substring(i + 1, L);
+                List<String> list = allComboDict.getOrDefault(newWord, new ArrayList<>());
+                list.add(word);
+                allComboDict.put(newWord, list);
+            }
+        }
+        wordList.remove(beginWord);
+        wordList.remove(endWord);
+        boolean find = false;
+        boolean reverseFlag = false;
+        //双端bfs寻找最短路径
+        while(!set1.isEmpty()) {
+            Set<String> set = new HashSet<>();
+            for(String word : set1) {
+                for(int i = 0;i < L;++i) {
+                    String newWord = word.substring(0, i) + "*" + word.substring(i + 1, L);
+                    for(String adjacentWord : allComboDict.getOrDefault(newWord, new ArrayList<>())) {
+                        String key = reverseFlag ? adjacentWord : word;
+                        String value = reverseFlag ? word : adjacentWord;
+                        List<String> list = path.getOrDefault(key, new LinkedList<>());
+                        if(set2.contains(adjacentWord)) {
+                            find = true;
+                            list.add(value);
+                            path.put(key, list);
+                        }
+                        if(wordList.contains(adjacentWord)) {
+                            set.add(adjacentWord);
+                            list.add(value);
+                            path.put(key, list);
+                        }
+                    }
+                }
+
+            }
+
+            if(find) {
+                break;
+            }
+            wordList.removeAll(set);
+            if(set.size() <= set2.size()) {
+                set1 = set;
+            } else {
+                set1 = set2;
+                set2 = set;
+                reverseFlag = !reverseFlag;
+            }
+
+        }
+        List<String> solution = new LinkedList();
+        solution.add(beginWord);
+        //dfs回溯所有的结果
+        dfs(beginWord, endWord, solution);
+        return result;
+    }
+
+    public static void dfs(String beginWord, String endWord, List<String> list) {
+        if(endWord.equals(beginWord)) {
+            result.add(new LinkedList(list));
+            return;
+        }
+        for(String adjacentWord : path.getOrDefault(beginWord, new LinkedList<String>())) {
+            list.add(adjacentWord);
+            dfs(adjacentWord, endWord, list);
+            list.remove(list.size() - 1);
+        }
+    }*/
+
 
     /**
      * 回溯法实现组合
