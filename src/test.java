@@ -43,6 +43,42 @@ public class test {
     }
 
     /**
+     * 查找所有最长非数字串
+     * @param s
+     * @return
+     */
+    public static List<String> findAllNonDigitStrList(String s) {
+        int left = -1;
+        int maxLength = 0;
+        List<String> result = new ArrayList<>();
+
+        for (int right = 0; right <= s.length(); right++) {
+            // 模拟一个“结束符”，处理末尾情况
+            boolean isNonDigit = (right < s.length()) && (s.charAt(right) < '0' || s.charAt(right) > '9');
+
+            if (isNonDigit) {
+                if (left == -1) {
+                    left = right; // 开始一个新的非数字段
+                }
+            } else {
+                // 当前字符是数字 或 right == s.length()（结束）
+                if (left != -1) {
+                    int length = right - left;
+                    if (length > maxLength) {
+                        maxLength = length;
+                        result.clear();
+                        result.add(s.substring(left, right));
+                    } else if (length == maxLength) {
+                        result.add(s.substring(left, right));
+                    }
+                    left = -1; // 重置
+                }
+            }
+        }
+        return result;
+    }
+
+    /**
      * leetcode1796. Second Largest Digit in a String
      * 找第二大的数
      * @param s
