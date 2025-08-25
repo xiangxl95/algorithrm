@@ -7,7 +7,7 @@ public class test {
     public static void main(String[] args) {
         //System.out.println(romanToInt("IX"));
         //System.out.println(isMatch("aaabbbaabaaaaababaabaaabbabbbbbbbbaabababbabbbaaaaba", "a*******b"));
-        /*TreeNode root = new TreeNode(1);
+        TreeNode root = new TreeNode(1);
         TreeNode node2 = new TreeNode(2);
         TreeNode node3 = new TreeNode(3);
         TreeNode node4 = new TreeNode(4);
@@ -17,7 +17,8 @@ public class test {
         node2.left = node3;
         node2.right = node4;
         //inorderTraversal(root);
-        isValidBST(root);*/
+        //levelOrderTraversal(root);
+        //isValidBST(root);
         //search(new int[]{5,1,2,3,4}, 1);
         //fullArrangement(new int[]{2,3,6,7});
         //combinationSum(new int[]{7,3,6,2}, 7);
@@ -783,6 +784,11 @@ public class test {
 
     }*/
 
+    /**
+     * 中序遍历
+     * @param root
+     * @return
+     */
     /*public static List < Integer > inorderTraversal(TreeNode root) {
         List < Integer > res = new ArrayList < > ();
         TreeNode curr = root;
@@ -805,6 +811,11 @@ public class test {
         return res;
     }*/
 
+    /**
+     * 中序遍历
+     * @param root
+     * @return
+     */
     public static List inorderTraversal(TreeNode root) {
         List<Integer> list = new ArrayList<>();
         TreeNode node = root;
@@ -832,6 +843,11 @@ public class test {
     }
 
 
+    /**
+     * 后序遍历(栈实现)
+     * @param root
+     * @return
+     */
     public List<Integer> postorderTraversal(TreeNode root) {
         List<Integer> list = new ArrayList();
         Stack<TreeNode> stack = new Stack();
@@ -849,6 +865,88 @@ public class test {
 
     }
 
+    /**
+     * 层序遍历
+     * @param root
+     * @return
+     */
+    public static List<Integer> levelOrderTraversal(TreeNode root) {
+        List<Integer> list = new ArrayList<Integer>();
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.offer(root);
+        while(!queue.isEmpty()) {
+            TreeNode node = queue.poll();
+            list.add(node.val);
+            if (node.left != null) {
+                queue.add(node.left);
+            }
+            if (node.right != null) {
+                queue.add(node.right);
+            }
+        }
+        return list;
+
+    }
+
+    /**
+     * 层序遍历求二叉树最大深度
+     * @param root
+     * @return
+     */
+    public static int maxDepth(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+        int ans = 0;
+        Queue<TreeNode> queue = new LinkedList<TreeNode>();
+        queue.offer(root);
+        while (!queue.isEmpty()) {
+            ans++;
+            int size = queue.size();
+            for (int i = 0;i < size;++i) {
+                TreeNode node = queue.poll();
+                if (node.left != null) {
+                    queue.add(node.left);
+                }
+                if (node.right != null) {
+                    queue.add(node.right);
+                }
+            }
+        }
+        return ans;
+    }
+
+    /**
+     * 层序遍历求最小深度
+     * @param root
+     * @return
+     */
+    public static int minDepth(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+        int ans = 0;
+        Queue<TreeNode> queue = new LinkedList<TreeNode>();
+        queue.offer(root);
+        while (!queue.isEmpty()) {
+            ans++;
+            int size = queue.size();
+            for (int i = 0;i < size;++i) {
+                TreeNode node = queue.poll();
+                // 叶子节点则停止
+                if (node.left == null && node.right == null) {
+                    return ans;
+                }
+                if (node.left != null) {
+                    queue.add(node.left);
+                }
+                if (node.right != null) {
+                    queue.add(node.right);
+                }
+            }
+        }
+        return ans;
+    }
 
     /*Regular Expression Matching*/
     /*public static boolean isMatch(String text, String pattern) {
