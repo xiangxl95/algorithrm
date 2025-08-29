@@ -47,7 +47,8 @@ public class test {
         ListNode l23 = new ListNode(4, null);
         ListNode l22 = new ListNode(6, l23);
         ListNode l21 = new ListNode(5, l22);
-        addTwoNumbers(l11, l21);
+        //addTwoNumbers(l11, l21);
+        heapSort(new int[]{4, 6, 8, 5, 9});
     }
 
     /**
@@ -621,6 +622,53 @@ public class test {
         }
         swap(nums, l, j);
         return j;
+    }
+
+    /**
+     * 堆排序（大顶堆）
+     * @param nums
+     */
+    public static void heapSort(int[] nums) {
+        int n = nums.length;
+        // 1.构建大顶堆
+        for (int i = n / 2 - 1;i >= 0;--i) {
+            // 从第一个非叶子节点从下至上，从左至右调整结构
+            adjustHeap(nums, i, n);
+        }
+        // 2.交换堆顶元素与末尾元素+调整堆结构
+        for (int j = n - 1;j >= 0;--j) {
+            // 交换堆顶元素
+            swap(nums, 0, j);
+            // 重新对堆进行调整
+            adjustHeap(nums, 0 , j);
+        }
+    }
+
+    /**
+     * 调整大顶堆
+     * @param nums
+     * @param i
+     * @param heapSize
+     */
+    public static void adjustHeap(int[] nums, int i, int heapSize) {
+        // 先取出当前元素i
+        int temp = nums[i];
+        // 从i节点的左子节点开始，也就是2i+1处开始
+        for (int k = 2 * i + 1;k < heapSize;k = 2 * k + 1) {
+            // 如果左子节点小于右子节点，k指向右子节点
+            if (k + 1 < heapSize && nums[k + 1] > nums[k]) {
+                k++;
+            }
+            // 如果子节点大于父节点，将子节点赋值给父节点（不用进行交换）
+            if (nums[k] > temp) {
+                nums[i] = nums[k];
+                i = k;
+            } else {
+                break;
+            }
+        }
+        // 将temp值放到最终位置
+        nums[i] = temp;
     }
 
     public static int singleNonDuplicate(int[] nums) {
