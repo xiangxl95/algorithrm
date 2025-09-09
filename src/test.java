@@ -833,6 +833,26 @@ public class test {
     }*/
 
     /**
+     * 二叉树的前序遍历
+     * @param root
+     * @return
+     */
+    public static List<Integer> preorderTraversal(TreeNode root) {
+        List<Integer> result = new ArrayList<Integer>();
+        preorderTraversal(result, root);
+        return result;
+    }
+
+    public static void preorderTraversal(List<Integer> result, TreeNode node) {
+        if (node == null) {
+            return;
+        }
+        result.add(node.val);
+        preorderTraversal(result, node.left);
+        preorderTraversal(result, node.right);
+    }
+
+    /**
      * 中序遍历
      * @param root
      * @return
