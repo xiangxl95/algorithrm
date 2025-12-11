@@ -52,6 +52,33 @@ public class test {
     }
 
     /**
+     * 双指针法反转字符串
+     * @param str
+     * @return
+     */
+    public static String reverseString(String str) {
+        if (str == null || str.length() <= 1) {
+            return str;
+        }
+
+        char[] chars = str.toCharArray();
+        int left = 0;
+        int right = chars.length - 1;
+
+        while (left < right) {
+            // 交换 chars[left] 和 chars[right]
+            char temp = chars[left];
+            chars[left] = chars[right];
+            chars[right] = temp;
+
+            left++;
+            right--;
+        }
+
+        return new String(chars);
+    }
+
+    /**
      * leetcode 2 两数相加
      * @param l1
      * @param l2
