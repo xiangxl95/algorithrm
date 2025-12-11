@@ -69,7 +69,7 @@ public class ReverseNode {
         ListNode root = node3;
         node3.next = node2;
         node2.next = node1;
-        ListNode newRoot = reverseNode(root);
+        //ListNode newRoot = reverseNode(root);
         reverseListRecursive(root);
         //System.out.println(newRoot.val + "-" + newRoot.next.val);
     }
